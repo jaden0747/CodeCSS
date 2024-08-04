@@ -20,7 +20,7 @@
 }
 
 #workbench\.parts\.statusbar:has([aria-label="-- VISUAL BLOCK --"]) {
-    background-color: #62b1b1 !important;
+    background-color: #518585 !important;
 }
 
 #workbench\.parts\.statusbar:has([aria-label="-- SURROUND INPUT --"]) {
