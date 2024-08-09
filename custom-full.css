@@ -1,18 +1,35 @@
-#workbench\.parts\.statusbar:has([aria-label^=":"]) { background-color: #0076c4 !important; }
-#workbench\.parts\.statusbar:has([aria-label^="/"]) { background-color: #226693 !important; }
+:root {
+    --white: #ffffff;
+    --black: #000000;
+    --command-color: #0076c4;
+    --search-color: #226693;
+    --normal-color: #181818;
+    --insert-color: #0076c4;
+    --replace-color: #c42400;
+    --easymotion-color: #78c9ff;
+    --visual-color: #b016ab;
+    --visualline-color: #5f00af;
+    --visualblock-color: #ed940e;
+    --surround-color: #8af85b;
+}
 
-#workbench\.parts\.statusbar:has([aria-label="-- NORMAL --"]) { background-color: #181818 !important; }
-#workbench\.parts\.statusbar:has([aria-label="-- INSERT --"]) { background-color: #0076c4 !important; }
-#workbench\.parts\.statusbar:has([aria-label="-- EASYMOTION --"]) { background-color: #0076c4 !important; }
-#workbench\.parts\.statusbar:has([aria-label="-- VISUAL --"]) { background-color: #5f00af !important; }
-#workbench\.parts\.statusbar:has([aria-label="-- VISUAL LINE --"]) { background-color: #5f00af !important; }
-#workbench\.parts\.statusbar:has([aria-label="-- VISUAL BLOCK --"]) { background-color: #965d20 !important; }
-#workbench\.parts\.statusbar:has([aria-label="-- SURROUND INPUT --"]) { background-color: #277d02 !important; }
+#workbench\.parts\.statusbar:has([aria-label^=":"]) { background-color: var(--insert-color) !important;   color: var(--white) !important}
+#workbench\.parts\.statusbar:has([aria-label^="/"]) { background-color: var(--search-color) !important;   color: var(--white) !important}
 
-#workbench\.parts\.statusbar:has([aria-label="-- NORMAL --  MULTI CURSOR"]) { background-color: #181818 !important; }
-#workbench\.parts\.statusbar:has([aria-label="-- INSERT --  MULTI CURSOR"]) { background-color: #0076c4 !important; }
-#workbench\.parts\.statusbar:has([aria-label="-- EASYMOTION --  MULTI CURSOR"]) { background-color: #0076c4 !important; }
-#workbench\.parts\.statusbar:has([aria-label="-- VISUAL --  MULTI CURSOR"]) { background-color: #5f00af !important; }
-#workbench\.parts\.statusbar:has([aria-label="-- VISUAL LINE --  MULTI CURSOR"]) { background-color: #5f00af !important; }
-#workbench\.parts\.statusbar:has([aria-label="-- VISUAL BLOCK --  MULTI CURSOR"]) { background-color: #965d20 !important; }
-#workbench\.parts\.statusbar:has([aria-label="-- SURROUND INPUT --  MULTI CURSOR"]) { background-color: #277d02 !important; }
+#workbench\.parts\.statusbar:has([aria-label="-- NORMAL --"]) { background-color: var(--normal-color) !important;   color: var(--white) !important}
+#workbench\.parts\.statusbar:has([aria-label="-- INSERT --"]) { background-color: var(--insert-color) !important;   color: var(--white) !important}
+#workbench\.parts\.statusbar:has([aria-label="-- REPLACE --"]) { background-color: var(--replace-color) !important;  color: var(--white) !important}
+#workbench\.parts\.statusbar:has([aria-label="-- EASYMOTION --"]) { background-color: var(--easymotion-color) !important;   color: var(--black) !important}
+#workbench\.parts\.statusbar:has([aria-label="-- VISUAL --"]) { background-color: var(--visual-color) !important;   color: var(--white) !important}
+#workbench\.parts\.statusbar:has([aria-label="-- VISUAL LINE --"]) { background-color: var(--visualline-color) !important;   color: var(--white) !important}
+#workbench\.parts\.statusbar:has([aria-label="-- VISUAL BLOCK --"]) { background-color: var(--visualblock-color) !important;   color: var(--black) !important}
+#workbench\.parts\.statusbar:has([aria-label="-- SURROUND INPUT --"]) { background-color: var(--surround-color) !important;   color: var(--black) !important}
+
+#workbench\.parts\.statusbar:has([aria-label="-- NORMAL --  MULTI CURSOR"]) { background-color: var(--normal-color) !important;   color: var(--white) !important}
+#workbench\.parts\.statusbar:has([aria-label="-- INSERT --  MULTI CURSOR"]) { background-color: var(--insert-color) !important;   color: var(--white) !important}
+#workbench\.parts\.statusbar:has([aria-label="-- REPLACE --  MULTI CURSOR"]) { background-color: var(--replace-color) !important;  color: var(--white) !important}
+#workbench\.parts\.statusbar:has([aria-label="-- EASYMOTION --  MULTI CURSOR"]) { background-color: var(--easymotion-color) !important;   color: var(--black) !important}
+#workbench\.parts\.statusbar:has([aria-label="-- VISUAL --  MULTI CURSOR"]) { background-color: var(--visual-color) !important;   color: var(--white) !important}
+#workbench\.parts\.statusbar:has([aria-label="-- VISUAL LINE --  MULTI CURSOR"]) { background-color: var(--visualline-color) !important;   color: var(--white) !important}
+#workbench\.parts\.statusbar:has([aria-label="-- VISUAL BLOCK --  MULTI CURSOR"]) { background-color: var(--visualblock-color) !important;   color: var(--black) !important}
+#workbench\.parts\.statusbar:has([aria-label="-- SURROUND INPUT --  MULTI CURSOR"]) { background-color: var(--surround-color) !important;   color: var(--black) !important}
