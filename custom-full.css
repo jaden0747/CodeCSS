@@ -3,7 +3,7 @@
     --black: #000000;
     --command-color: #0076c4;
     --search-color: #226693;
-    --normal-color: #181818;
+    --normal-color: #0f469e;
     --insert-color: #0076c4;
     --replace-color: #c42400;
     --easymotion-color: #78c9ff;
@@ -40,7 +40,7 @@
 	z-index: 2550;
 	left: 50%;
 	top: 25% !important;
-	margin-left: -300px;
+	margin-left: 0px;
 	-webkit-app-region: no-drag;
 	border-radius: 6px;
 }
