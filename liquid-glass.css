@@ -1,24 +1,24 @@
-/* VSCode Liquid Glass 效果 */
-/* 透明度可配置 + 完整弹出层覆盖 */
+/* VSCode Liquid Glass effect */
+/* Configurable transparency + full overlay coverage */
 
-/* ==================== 通用 Liquid Glass 样式 ==================== */
+/* ==================== General Liquid Glass styles ==================== */
 
 :root {
-  /* Liquid Glass 颜色变量 */
+  /* Liquid Glass color variables */
   --glass-bg-light: rgba(255, 255, 255, 0.3);
   --glass-bg-dark: rgba(30, 30, 30, 0.3);
   --glass-border: transparent;
   --glass-shadow: rgba(0, 0, 0, 0.4);
 
-  /* 模糊和饱和度 */
+  /* Blur and saturation */
   --glass-blur: blur(8px);
   --glass-saturate: saturate(130%);
   --glass-brightness: brightness(1.05);
 }
 
-/* ==================== 0. 整个窗口毛玻璃背景 ==================== */
+/* ==================== 0. Full-window frosted glass background ==================== */
 
-/* 主工作区背景 */
+/* Main workbench background */
 html,
 body,
 .monaco-workbench,
@@ -31,7 +31,7 @@ body,
   background-attachment: fixed !important;
 }
 
-/* 编辑器区域半透明 */
+/* Editor area semi-transparent */
 .monaco-workbench .editor-container,
 .monaco-workbench .split-view-view,
 .monaco-workbench .part.editor,
@@ -45,7 +45,7 @@ body,
   background: rgba(30, 30, 30, 0.2) !important;
 }
 
-/* 行号区域半透明 */
+/* Line number area semi-transparent */
 .monaco-editor .margin,
 .monaco-editor .glyph-margin,
 .monaco-editor .line-numbers {
@@ -54,7 +54,7 @@ body,
   -webkit-backdrop-filter: blur(5px) !important;
 }
 
-/* 侧边栏半透明 */
+/* Sidebar semi-transparent */
 .monaco-workbench .part.sidebar,
 .monaco-workbench .part.auxiliarybar,
 .monaco-workbench .part.activitybar,
@@ -64,7 +64,7 @@ body,
   background-color: rgba(30, 30, 30, 0.3) !important;
 }
 
-/* 折叠菜单标题需要背景色防止内容透上来 */
+/* Collapsible header needs background to prevent bleed-through */
 .pane-header,
 .panel-header,
 .composite-title,
@@ -85,7 +85,7 @@ div[class*="pane-header"],
   z-index: 100 !important;
 }
 
-/* 文件树项需要轻微背景色防止重叠 - 但排除 Quick Input */
+/* File tree items need slight background to avoid overlap - exclude Quick Input */
 .monaco-workbench .part.sidebar .monaco-list-row,
 .monaco-workbench .part.sidebar .monaco-tl-row,
 .monaco-workbench .part.auxiliarybar .monaco-list-row,
@@ -98,15 +98,15 @@ div[class*="pane-header"],
   -webkit-backdrop-filter: blur(2px) !important;
 }
 
-/* hover 状态 - 但排除 Quick Input */
+/* Hover state - exclude Quick Input */
 .monaco-workbench .part.sidebar .monaco-list-row:hover,
 .monaco-workbench .part.auxiliarybar .monaco-list-row:hover {
   background: rgba(255, 255, 255, 0.15) !important;
   background-color: rgba(255, 255, 255, 0.15) !important;
 }
 
-/* 子元素背景透明 - 但排除 pane-header 和 list-row */
-/* Panel 不使用通配符规则，有独立的样式控制 */
+/* Child elements transparent - exclude pane-header and list-row */
+/* Panel should not use wildcard rules; it has dedicated styles */
 .monaco-workbench .part.sidebar *:not(.pane-header):not(.panel-header):not(.composite-title):not(.monaco-list-row):not(.monaco-tl-row),
 .monaco-workbench .part.auxiliarybar *:not(.pane-header):not(.panel-header):not(.composite-title):not(.monaco-list-row):not(.monaco-tl-row),
 .monaco-workbench .part.activitybar *,
@@ -114,7 +114,7 @@ div[class*="pane-header"],
   background-color: transparent !important;
 }
 
-/* 标签栏半透明 */
+/* Tab bar semi-transparent */
 .monaco-workbench .tabs-and-actions-container,
 .monaco-workbench .editor-group-container > .title,
 .monaco-workbench .title.tabs,
@@ -123,7 +123,7 @@ div[class*="pane-header"],
   background-color: rgba(30, 30, 30, 0.3) !important;
 }
 
-/* 单个标签透明 */
+/* Individual tabs transparent */
 .monaco-workbench .tab {
   background: transparent !important;
   background-color: transparent !important;
@@ -134,7 +134,7 @@ div[class*="pane-header"],
   background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
-/* ==================== Quick Input 居中 + Liquid Glass ==================== */
+/* ==================== Quick Input centered + Liquid Glass ==================== */
 
 .monaco-workbench .quick-input-widget {
   position: fixed !important;
@@ -190,7 +190,7 @@ div[class*="pane-header"],
   -webkit-backdrop-filter: blur(5px) !important;
 }
 
-/* ==================== 弹出层毛玻璃效果 ==================== */
+/* ==================== Overlay frosted glass effects ==================== */
 
 /* Context Menu */
 .monaco-workbench .context-view,
@@ -205,7 +205,7 @@ div.context-view {
   padding: 6px !important;
 }
 
-/* 通知消息 */
+/* Notifications */
 .monaco-workbench .notifications-toasts,
 .monaco-workbench .notification-toast,
 .monaco-workbench .notification-toast-container,
@@ -223,7 +223,7 @@ div.context-view {
   border-radius: 12px !important;
 }
 
-/* 代码定义悬停 */
+/* Code definition hover */
 .monaco-workbench .monaco-hover,
 .monaco-workbench .monaco-editor-hover,
 .monaco-workbench .editor-hover-content,
@@ -239,7 +239,7 @@ div.context-view {
   border-radius: 10px !important;
 }
 
-/* Hover 内容区域 */
+/* Hover content area */
 .monaco-workbench .monaco-hover .hover-contents,
 .monaco-hover .hover-contents,
 .monaco-workbench .monaco-hover .hover-row,
@@ -251,7 +251,7 @@ div.context-view {
   border-radius: 10px !important;
 }
 
-/* 代码提示框 (Suggest Widget) */
+/* Code suggestion box (Suggest Widget) */
 .monaco-workbench .suggest-widget,
 .monaco-workbench .editor-widget.suggest-widget,
 .suggest-widget,
@@ -281,7 +281,7 @@ div.context-view {
   -webkit-backdrop-filter: blur(5px) !important;
 }
 
-/* 参数提示框 (Parameter Hints) */
+/* Parameter hints box (Parameter Hints) */
 .monaco-workbench .parameter-hints-widget,
 .parameter-hints-widget {
   background: rgba(30, 30, 30, 0.5) !important;
@@ -292,7 +292,7 @@ div.context-view {
   border-radius: 10px !important;
 }
 
-/* 搜索框 (Find Widget) */
+/* Find box (Find Widget) */
 .monaco-workbench .find-widget,
 .monaco-workbench .editor-widget.find-widget,
 .find-widget,
@@ -305,7 +305,7 @@ div.context-view {
   border-radius: 10px !important;
 }
 
-/* 搜索视图 (Search View) */
+/* Search view (Search View) */
 .monaco-workbench .search-view,
 .search-view {
   background: transparent !important;
@@ -319,7 +319,7 @@ div.context-view {
   border-radius: 8px !important;
 }
 
-/* Monaco List 统一选中效果 */
+/* Monaco List unified selection effects */
 .monaco-workbench .monaco-list .monaco-list-row:hover,
 .monaco-list .monaco-list-row:hover {
   background: rgba(255, 255, 255, 0.08) !important;
@@ -359,7 +359,7 @@ div.context-view {
   border-radius: 6px !important;
 }
 
-/* 终端 sticky scroll 标题栏 - 添加背景和模糊 */
+/* Terminal sticky scroll header - add background and blur */
 .terminal-sticky-scroll,
 .monaco-workbench .terminal-sticky-scroll,
 .part.panel .terminal-sticky-scroll {
@@ -370,7 +370,7 @@ div.context-view {
   z-index: 1000 !important;
 }
 
-/* 警告对话框 - 添加模糊效果 */
+/* Alert dialog - add blur effect */
 .monaco-alert {
   background: rgba(30, 30, 30, 0.85) !important;
   backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important;
@@ -380,8 +380,8 @@ div.context-view {
   border-radius: 12px !important;
 }
 
-/* 设置页面 - 透明背景 */
-/* 左侧设置菜单 */
+/* Settings page - transparent background */
+/* Left-side settings menu */
 .monaco-workbench .settings-editor .settings-toc-container,
 .settings-editor .settings-toc-container {
   background: transparent !important;
@@ -392,20 +392,20 @@ div.context-view {
   background: transparent !important;
 }
 
-/* 设置项列表 */
+/* Settings items list */
 .monaco-workbench .settings-editor .settings-body,
 .settings-editor .settings-body {
   background: transparent !important;
 }
 
-/* 单个设置项 */
+/* Single settings item */
 .monaco-workbench .settings-editor .setting-item,
 .settings-editor .setting-item {
   background: transparent !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
 }
 
-/* 设置项 hover 效果 */
+/* Settings item hover effect */
 .monaco-workbench .settings-editor .setting-item:hover,
 .settings-editor .setting-item:hover {
   background: rgba(255, 255, 255, 0.03) !important;
@@ -413,7 +413,7 @@ div.context-view {
   -webkit-backdrop-filter: blur(5px) !important;
 }
 
-/* 设置分组标题 */
+/* Settings group title */
 .monaco-workbench .settings-editor .settings-group-title-label,
 .settings-editor .settings-group-title-label {
   background: rgba(30, 30, 30, 0.3) !important;
@@ -422,7 +422,7 @@ div.context-view {
   border-radius: 8px !important;
 }
 
-/* 设置左侧菜单项 */
+/* Settings left-side menu item */
 .monaco-workbench .settings-editor .settings-toc-entry,
 .settings-editor .settings-toc-entry {
   background: transparent !important;
@@ -442,7 +442,7 @@ div.context-view {
   -webkit-backdrop-filter: blur(5px) !important;
 }
 
-/* 设置页面的 monaco-list 背景透明 */
+/* Monaco list on settings page: transparent background */
 .monaco-workbench .settings-editor .monaco-list .monaco-list-rows,
 .settings-editor .monaco-list .monaco-list-rows,
 .monaco-list.list_id_6 .monaco-list-rows,
@@ -451,16 +451,16 @@ div.context-view {
   background-color: transparent !important;
 }
 
-/* 设置页面中所有 monaco-list */
+/* All monaco lists on settings page */
 .monaco-workbench .settings-editor .monaco-list,
 .settings-editor .monaco-list {
   background: transparent !important;
   background-color: transparent !important;
 }
 
-/* ==================== Jupyter Notebook 透明背景 ==================== */
+/* ==================== Jupyter Notebook transparent background ==================== */
 
-/* Notebook 编辑器容器 */
+/* Notebook editor container */
 .monaco-workbench .notebookOverlay,
 .monaco-workbench .notebook-editor,
 .notebookOverlay,
@@ -469,14 +469,14 @@ div.context-view {
   background-color: transparent !important;
 }
 
-/* Notebook 单元格列表 */
+/* Notebook cell list */
 .monaco-workbench .notebook-cell-list,
 .notebook-cell-list {
   background: transparent !important;
   background-color: transparent !important;
 }
 
-/* 单个 Notebook 单元格 */
+/* Single notebook cell */
 .monaco-workbench .cell,
 .monaco-workbench .notebook-cell,
 .monaco-workbench .code-cell-row,
@@ -489,7 +489,7 @@ div.context-view {
   background-color: transparent !important;
 }
 
-/* 单元格输入区域 */
+/* Cell input area */
 .monaco-workbench .cell-editor-container,
 .monaco-workbench .input-cell-container,
 .cell-editor-container,
@@ -500,7 +500,7 @@ div.context-view {
   border-radius: 8px !important;
 }
 
-/* 单元格输出区域 */
+/* Cell output area */
 .monaco-workbench .cell-output-container,
 .monaco-workbench .output-container,
 .cell-output-container,
@@ -509,7 +509,7 @@ div.context-view {
   background-color: transparent !important;
 }
 
-/* Notebook 工具栏 */
+/* Notebook toolbar */
 .monaco-workbench .notebook-toolbar,
 .monaco-workbench .notebook-cell-toolbar,
 .notebook-toolbar,
@@ -520,7 +520,7 @@ div.context-view {
   border-radius: 6px !important;
 }
 
-/* 单元格选中效果 */
+/* Cell selection effect */
 .monaco-workbench .notebook-cell.focused,
 .monaco-workbench .notebook-cell.selected,
 .notebook-cell.focused,
@@ -528,7 +528,7 @@ div.context-view {
   background: rgba(90, 150, 255, 0.1) !important;
 }
 
-/* Notebook 输出内容区域 */
+/* Notebook output content area */
 .monaco-workbench .output,
 .monaco-workbench .cell-output,
 .output,
@@ -539,13 +539,13 @@ div.context-view {
   border-radius: 6px !important;
 }
 
-/* Notebook 滚动区域 */
+/* Notebook scroll area */
 .monaco-workbench .notebook-editor .monaco-scrollable-element,
 .notebook-editor .monaco-scrollable-element {
   background: transparent !important;
 }
 
-/* Notebook editor 单元格列表行容器 */
+/* Notebook editor cell list row container */
 .notebook-editor > .cell-list-container > .monaco-list > .monaco-list-rows,
 .monaco-workbench .notebook-editor > .cell-list-container > .monaco-list > .monaco-list-rows {
   background: transparent !important;
