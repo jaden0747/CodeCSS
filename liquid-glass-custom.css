@@ -102,7 +102,8 @@
 .monaco-workbench .editor-widget.suggest-widget,
 .suggest-widget,
 .editor-widget.suggest-widget {
-  background: rgba(30, 30, 30, 0.5) !important;
+  background: transparent !important;
+  /* background: rgba(30, 30, 30, 0.5) !important; */
   backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important;
   -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
@@ -123,7 +124,8 @@
 /* Parameter hints box (Parameter Hints) */
 .monaco-workbench .parameter-hints-widget,
 .parameter-hints-widget {
-  background: rgba(30, 30, 30, 0.5) !important;
+  background: transparent !important;
+  /* background: rgba(30, 30, 30, 0.5) !important; */
   backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important;
   -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
@@ -136,7 +138,8 @@
 .monaco-workbench .editor-widget.find-widget,
 .find-widget,
 .editor-widget.find-widget {
-  background: rgba(30, 30, 30, 0.5) !important;
+  background: transparent !important;
+  /* background: rgba(30, 30, 30, 0.5) !important; */
   backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important;
   -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
@@ -146,7 +149,8 @@
 
 .monaco-workbench .search-view .search-widget,
 .search-view .search-widget {
-  background: rgba(30, 30, 30, 0.3) !important;
+  background: transparent !important;
+  /* background: rgba(30, 30, 30, 0.3) !important; */
   backdrop-filter: blur(5px) !important;
   -webkit-backdrop-filter: blur(5px) !important;
   border-radius: 8px !important;
