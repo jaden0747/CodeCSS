@@ -120,13 +120,6 @@
   background: transparent !important;
 }
 
-.monaco-workbench .suggest-widget .monaco-list .monaco-list-row.focused,
-.suggest-widget .monaco-list .monaco-list-row.focused {
-  background: rgba(90, 150, 255, 0.3) !important;
-  backdrop-filter: blur(5px) !important;
-  -webkit-backdrop-filter: blur(5px) !important;
-}
-
 /* Parameter hints box (Parameter Hints) */
 .monaco-workbench .parameter-hints-widget,
 .parameter-hints-widget {
@@ -151,155 +144,10 @@
   border-radius: 10px !important;
 }
 
-/* Search view (Search View) */
-.monaco-workbench .search-view,
-.search-view {
-  background: transparent !important;
-}
-
 .monaco-workbench .search-view .search-widget,
 .search-view .search-widget {
   background: rgba(30, 30, 30, 0.3) !important;
   backdrop-filter: blur(5px) !important;
   -webkit-backdrop-filter: blur(5px) !important;
   border-radius: 8px !important;
-}
-
-/* Monaco List unified selection effects */
-.monaco-workbench .monaco-list .monaco-list-row:hover,
-.monaco-list .monaco-list-row:hover {
-  background: rgba(255, 255, 255, 0.08) !important;
-  backdrop-filter: blur(5px) !important;
-  -webkit-backdrop-filter: blur(5px) !important;
-  border-radius: 6px !important;
-}
-
-.monaco-workbench .monaco-list .monaco-list-row.focused,
-.monaco-list .monaco-list-row.focused,
-.monaco-workbench .monaco-list .monaco-list-row:focus,
-.monaco-list .monaco-list-row:focus {
-  background: rgba(90, 150, 255, 0.3) !important;
-  backdrop-filter: blur(5px) !important;
-  -webkit-backdrop-filter: blur(5px) !important;
-  border-radius: 6px !important;
-  outline: none !important;
-}
-
-.monaco-workbench .monaco-list .monaco-list-row.selected,
-.monaco-list .monaco-list-row.selected,
-.monaco-workbench .monaco-list .monaco-list-row[aria-selected="true"],
-.monaco-list .monaco-list-row[aria-selected="true"] {
-  background: rgba(90, 150, 255, 0.25) !important;
-  backdrop-filter: blur(5px) !important;
-  -webkit-backdrop-filter: blur(5px) !important;
-  border-radius: 6px !important;
-}
-
-.monaco-workbench .monaco-list .monaco-list-row.selected.focused,
-.monaco-list .monaco-list-row.selected.focused,
-.monaco-workbench .monaco-list .monaco-list-row.selected:focus,
-.monaco-list .monaco-list-row.selected:focus {
-  background: rgba(90, 150, 255, 0.4) !important;
-  backdrop-filter: blur(5px) !important;
-  -webkit-backdrop-filter: blur(5px) !important;
-  border-radius: 6px !important;
-}
-
-/* Terminal sticky scroll header - add background and blur */
-.terminal-sticky-scroll,
-.monaco-workbench .terminal-sticky-scroll,
-.part.panel .terminal-sticky-scroll {
-  background: rgba(30, 30, 30, 0.28) !important;
-  background-color: rgba(30, 30, 30, 0.28) !important;
-  backdrop-filter: blur(5px) saturate(180%) !important;
-  position: relative !important;
-  z-index: 1000 !important;
-}
-
-/* Alert dialog - add blur effect */
-.monaco-alert {
-  background: rgba(30, 30, 30, 0.85) !important;
-  backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important;
-  -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  box-shadow: 0 16px 50px 0 rgba(0, 0, 0, 0.6) !important;
-  border-radius: 12px !important;
-}
-
-/* Settings page - transparent background */
-/* Left-side settings menu */
-.monaco-workbench .settings-editor .settings-toc-container,
-.settings-editor .settings-toc-container {
-  background: transparent !important;
-}
-
-.monaco-workbench .settings-editor .settings-toc-wrapper,
-.settings-editor .settings-toc-wrapper {
-  background: transparent !important;
-}
-
-/* Settings items list */
-.monaco-workbench .settings-editor .settings-body,
-.settings-editor .settings-body {
-  background: transparent !important;
-}
-
-/* Single settings item */
-.monaco-workbench .settings-editor .setting-item,
-.settings-editor .setting-item {
-  background: transparent !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-}
-
-/* Settings item hover effect */
-.monaco-workbench .settings-editor .setting-item:hover,
-.settings-editor .setting-item:hover {
-  background: rgba(255, 255, 255, 0.03) !important;
-  backdrop-filter: blur(5px) !important;
-  -webkit-backdrop-filter: blur(5px) !important;
-}
-
-/* Settings group title */
-.monaco-workbench .settings-editor .settings-group-title-label,
-.settings-editor .settings-group-title-label {
-  background: rgba(30, 30, 30, 0.3) !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
-  border-radius: 8px !important;
-}
-
-/* Settings left-side menu item */
-.monaco-workbench .settings-editor .settings-toc-entry,
-.settings-editor .settings-toc-entry {
-  background: transparent !important;
-}
-
-.monaco-workbench .settings-editor .settings-toc-entry:hover,
-.settings-editor .settings-toc-entry:hover {
-  background: rgba(255, 255, 255, 0.05) !important;
-  backdrop-filter: blur(5px) !important;
-  -webkit-backdrop-filter: blur(5px) !important;
-}
-
-.monaco-workbench .settings-editor .settings-toc-entry.selected,
-.settings-editor .settings-toc-entry.selected {
-  background: rgba(90, 150, 255, 0.2) !important;
-  backdrop-filter: blur(5px) !important;
-  -webkit-backdrop-filter: blur(5px) !important;
-}
-
-/* Monaco list on settings page: transparent background */
-.monaco-workbench .settings-editor .monaco-list .monaco-list-rows,
-.settings-editor .monaco-list .monaco-list-rows,
-.monaco-list.list_id_6 .monaco-list-rows,
-.monaco-list.list_id_7 .monaco-list-rows {
-  background: transparent !important;
-  background-color: transparent !important;
-}
-
-/* All monaco lists on settings page */
-.monaco-workbench .settings-editor .monaco-list,
-.settings-editor .monaco-list {
-  background: transparent !important;
-  background-color: transparent !important;
 }
