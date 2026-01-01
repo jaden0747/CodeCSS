@@ -34,13 +34,11 @@
 #workbench\.parts\.statusbar:has([aria-label="-- VISUAL BLOCK --  MULTI CURSOR"]) { background-color: var(--visualblock-color) !important;   color: var(--black) !important}
 #workbench\.parts\.statusbar:has([aria-label="-- SURROUND INPUT --  MULTI CURSOR"]) { background-color: var(--surround-color) !important;   color: var(--black) !important}
 
-.quick-input-widget {
-	position: absolute;
-	width: 600px;
-	z-index: 2550;
-	left: 50%;
-	top: 25% !important;
-	margin-left: 0px;
-	-webkit-app-region: no-drag;
-	border-radius: 6px;
+.monaco-workbench .quick-input-widget {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 600px !important;
+    max-width: 90vw !important;
 }

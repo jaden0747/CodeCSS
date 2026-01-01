@@ -66,68 +66,8 @@
   background: transparent !important;
 }
 
-.monaco-workbench .quick-input-widget .monaco-inputbox {
-  background: rgba(255, 255, 255, 0.1) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  border-radius: 8px !important;
-  backdrop-filter: blur(5px) !important;
-  -webkit-backdrop-filter: blur(5px) !important;
-}
-
-.monaco-workbench .quick-input-list .monaco-list-row {
-  background: transparent !important;
-  background-color: transparent !important;
-  border-radius: 6px !important;
-  margin: 0px !important;
-  padding-left: 12px !important;
-}
-
-.monaco-workbench .quick-input-list .monaco-list-row:hover {
-  background: rgba(255, 255, 255, 0.08) !important;
-  background-color: rgba(255, 255, 255, 0.08) !important;
-  backdrop-filter: blur(5px) !important;
-  -webkit-backdrop-filter: blur(5px) !important;
-}
-
-.monaco-workbench .quick-input-list .monaco-list-row.focused {
-  background: rgba(90, 150, 255, 0.25) !important;
-  background-color: rgba(90, 150, 255, 0.25) !important;
-  backdrop-filter: blur(5px) !important;
-  -webkit-backdrop-filter: blur(5px) !important;
-}
-
 /* ==================== Overlay frosted glass effects ==================== */
 
-/* Context Menu */
-.monaco-workbench .context-view,
-.shadow-root-host .context-view,
-div.context-view {
-  background: var(--glass-bg-dark) !important;
-  backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important;
-  -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important;
-  border: none !important;
-  box-shadow: 0 10px 40px 0 var(--glass-shadow) !important;
-  border-radius: 10px !important;
-  padding: 6px !important;
-}
-
-/* Notifications */
-.monaco-workbench .notifications-toasts,
-.monaco-workbench .notification-toast,
-.monaco-workbench .notification-toast-container,
-.monaco-workbench .notification-list-item,
-.notifications-toasts,
-.notification-toast,
-.notification-toast-container,
-.notification-list-item,
-.notifications-center {
-  background: rgba(30, 30, 30, 0) !important;
-  backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important;
-  -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important;
-  border: none !important;
-  box-shadow: 0 12px 40px 0 var(--glass-shadow) !important;
-  border-radius: 12px !important;
-}
 
 /* Code definition hover */
 .monaco-workbench .monaco-hover,
