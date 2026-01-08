@@ -19,15 +19,8 @@
 /* ==================== Quick Input centered + Liquid Glass ==================== */
 
 .monaco-workbench .quick-input-widget {
-  position: fixed !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  width: 600px !important;
-  max-width: 90vw !important;
-
-  background: rgba(30, 30, 30, 0) !important;
-  /* background: rgba(255, 255, 255, 0.1) !important; */
+  /* background: rgba(30, 30, 30, 0) !important; */
+  background: rgba(255, 255, 255, 0.1) !important;
   background-color: transparent !important;
   backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important;
   -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important;
@@ -68,7 +61,6 @@
 
 /* ==================== Overlay frosted glass effects ==================== */
 
-
 /* Code definition hover */
 .monaco-workbench .monaco-hover,
 .monaco-workbench .monaco-editor-hover,
@@ -95,6 +87,7 @@
   background: transparent !important;
   border: none !important;
   border-radius: 10px !important;
+  outline: none !important;
 }
 
 /* Code suggestion box (Suggest Widget) */
@@ -107,6 +100,8 @@
   backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important;
   -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  /* border: none !important; */
+  outline: none !important;
   box-shadow: 0 8px 30px 0 var(--glass-shadow) !important;
   border-radius: 10px !important;
 }
@@ -121,6 +116,13 @@
   background: transparent !important;
 }
 
+.monaco-workbench .suggest-widget .monaco-list .monaco-list-row.focused,
+.suggest-widget .monaco-list .monaco-list-row.focused {
+  /* background: rgba(90, 150, 255, 0.3) !important; */
+  backdrop-filter: blur(5px) !important;
+  -webkit-backdrop-filter: blur(5px) !important;
+}
+
 /* Parameter hints box (Parameter Hints) */
 .monaco-workbench .parameter-hints-widget,
 .parameter-hints-widget {
@@ -129,6 +131,7 @@
   backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important;
   -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border: none !important;
   box-shadow: 0 8px 30px 0 var(--glass-shadow) !important;
   border-radius: 10px !important;
 }
@@ -149,9 +152,49 @@
 
 .monaco-workbench .search-view .search-widget,
 .search-view .search-widget {
-  background: transparent !important;
-  /* background: rgba(30, 30, 30, 0.3) !important; */
-  backdrop-filter: blur(5px) !important;
-  -webkit-backdrop-filter: blur(5px) !important;
+  background: rgba(30, 30, 30, 0.3) !important;
+  /* backdrop-filter: blur(5px) !important; */
+  /* -webkit-backdrop-filter: blur(5px) !important; */
   border-radius: 8px !important;
+}
+
+/* Monaco List unified selection effects */
+.monaco-workbench .monaco-list .monaco-list-row:hover,
+.monaco-list .monaco-list-row:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  /* backdrop-filter: blur(5px) !important; */
+  /* -webkit-backdrop-filter: blur(5px) !important; */
+  border-radius: 6px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.monaco-workbench .monaco-list .monaco-list-row.focused,
+.monaco-list .monaco-list-row.focused,
+.monaco-workbench .monaco-list .monaco-list-row:focus,
+.monaco-list .monaco-list-row:focus {
+  background: rgba(90, 150, 255, 0.3) !important;
+  /* backdrop-filter: blur(5px) !important; */
+  /* -webkit-backdrop-filter: blur(5px) !important; */
+  border-radius: 6px !important;
+  outline: none !important;
+}
+
+.monaco-workbench .monaco-list .monaco-list-row.selected,
+.monaco-list .monaco-list-row.selected,
+.monaco-workbench .monaco-list .monaco-list-row[aria-selected="true"],
+.monaco-list .monaco-list-row[aria-selected="true"] {
+  /* background: rgba(90, 150, 255, 0.25) !important; */
+  /* backdrop-filter: blur(5px) !important; */
+  /* -webkit-backdrop-filter: blur(5px) !important; */
+  border-radius: 6px !important;
+}
+
+.monaco-workbench .monaco-list .monaco-list-row.selected.focused,
+.monaco-list .monaco-list-row.selected.focused,
+.monaco-workbench .monaco-list .monaco-list-row.selected:focus,
+.monaco-list .monaco-list-row.selected:focus {
+  /* background: rgba(90, 150, 255, 0.4) !important; */
+  /* backdrop-filter: blur(5px) !important; */
+  /* -webkit-backdrop-filter: blur(5px) !important; */
+  border-radius: 6px !important;
 }
