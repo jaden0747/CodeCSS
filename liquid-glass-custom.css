@@ -44,6 +44,18 @@
   background-color: transparent !important;
 }
 
+.monaco-workbench .quick-input-widget .monaco-inputbox {
+  /* background: rgba(255, 255, 255, 0.1) !important; */
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 8px !important;
+  backdrop-filter: blur(5px) !important;
+  -webkit-backdrop-filter: blur(5px) !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  /* backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important; */
+  /* -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important; */
+}
+
 /* As a safety net, make most descendants transparent but preserve input and row states */
 .monaco-workbench .quick-input-widget *:not(.monaco-inputbox):not(.monaco-list-row):not(.monaco-list):not(.monaco-list-rows) {
   background: transparent !important;
