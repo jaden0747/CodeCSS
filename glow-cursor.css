@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Tourney:ital,wght@1,100&display=swap');
+
+
+.monaco-editor .cursor {
+    box-shadow: 0 0 15px 2px #00c3ff;
+    animation: cursor .5s infinite linear;
+}
+
+
+.editor-group-container:after {
+    animation: flight 2s infinite linear;
+}
+
+.view-line .inline-folded:after {
+    color:yellow;
+    border-radius: 5px;
+    animation: colapse .5s linear;
+}
+
+.monaco-editor .line-numbers.active-line-number {
+    color: turquoise;
+    text-shadow: 0 0 1px yellow!important;
+}
+
+
+
+
+/* canvas.minimap-decorations-layer {
+    background-color: transparent !important;
+    background-image: linear-gradient(to bottom, #200933 75%, #3d0b43);
+    background-size: auto 100vh;
+    background-position: top;
+    background-repeat: no-repeat;
+} */
+
+.monaco-editor .minimap-shadow-visible {
+    box-shadow: none!important;
+}
+
+@keyframes colapse {
+    0% {
+        background-color:yellow;
+        box-shadow: 0 0 5px 0 yellow;
+    }
+    70% {
+        background-color: yellow;
+        box-shadow: 0 0 35px 10px yellow;
+    }
+    100% {
+        background-color: transparent;
+    }
+}
+
+@keyframes cursor {
+    0% {
+        box-shadow: 0 0 5px 0 #00c3ff;
+    }
+    100% {
+        box-shadow: 0 0 35px 5px #00c3ff;
+    }
+}
+
+@keyframes flight {
+  0% {
+    transform: perspective(100px) rotateX(60deg) translateY(0px);
+  }
+  100% {
+    transform: perspective(100px) rotateX(60deg) translateY(20px);
+  }
+}
+
