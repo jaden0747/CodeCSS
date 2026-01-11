@@ -1,9 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Tourney:ital,wght@1,100&display=swap');
 
+/* .monaco-editor .selected-text {
+    background-color: #000000aa!important;
+    box-shadow: 0 0 2px 2px #00c3ff;
+    color: #fff!important;
+ } */
 
 .monaco-editor .cursor {
     box-shadow: 0 0 15px 2px #00c3ff;
-    animation: cursor .5s infinite linear;
+    /* animation: cursor .5s infinite linear; */
 }
 
 
