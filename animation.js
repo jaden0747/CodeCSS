@@ -7,6 +7,7 @@
           (t.CursorAnimation = class {
             constructor(e) {
               (this._cursorCanvas = document.createElement("canvas")),
+                (this._interval = null),
                 (this._options = {
                   color: e?.color || "#ffffff",
                   cursorStyle: e?.cursorStyle || "block",
@@ -15,14 +16,10 @@
                 this.init();
             }
             getColor() {
-              if (!this._options.color.startsWith("--")) {
-                return this._options.color;
-              }
-              if (!this._cachedWorkbench) {
-                this._cachedWorkbench = document.querySelector(".monaco-workbench");
-              }
-              return this._cachedWorkbench
-                ? getComputedStyle(this._cachedWorkbench).getPropertyValue(this._options.color)
+              return this._options.color.startsWith("--")
+                ? getComputedStyle(
+                    document.querySelector(".monaco-workbench")
+                  ).getPropertyValue(this._options.color)
                 : this._options.color;
             }
             updateOptions(e) {
@@ -33,17 +30,22 @@
                   e?.trailLength || this._options.trailLength);
             }
             destroy() {
-              this._cursorHandle?.stop();
-              this._cursorHandle = null;
-              this._cursorCanvas?.remove();
+              this._cursorHandle.stop(),
+                (this._cursorHandle = null),
+                this._cursorCanvas.remove(),
+                this._interval && clearInterval(this._interval),
+                (this._interval = null);
             }
             init() {
-              this._cachedWorkbench = null;
               this.createCursorHandler({
                 onStarted: (e) => {
-                  this._cursorCanvas.style.cssText = 'pointer-events: none; position: absolute; top: 0px; left: 0px; z-index: 1000; will-change: contents;';
-                  e.appendChild(this._cursorCanvas);
-                  (this._cursorHandle = this.createTrail({
+                  (this._cursorCanvas.style.pointerEvents = "none"),
+                    (this._cursorCanvas.style.position = "absolute"),
+                    (this._cursorCanvas.style.top = "0px"),
+                    (this._cursorCanvas.style.left = "0px"),
+                    (this._cursorCanvas.style.zIndex = "1000"),
+                    e.appendChild(this._cursorCanvas),
+                    (this._cursorHandle = this.createTrail({
                       length: this._options.trailLength,
                       color: this._options.color,
                       size: 7,
@@ -139,20 +141,21 @@
                 };
               return {
                 updateParticles: () => {
-                  if (!c) return;
-                  o.clearRect(0, 0, n, i);
-                  let e = s.x, t = s.y;
-                  const len = r.length;
-                  for (let idx = 0; idx < len; idx++) {
-                    const next = r[(idx + 1) % len];
-                    const curr = r[idx];
-                    if (!curr || !next) continue;
-                    curr.position.x = e;
-                    curr.position.y = t;
-                    e += 0.42 * (next.position.x - curr.position.x);
-                    t += 0.35 * (next.position.y - curr.position.y);
-                  }
-                  "block" === this._options.cursorStyle ? m() : h();
+                  c &&
+                    (o.clearRect(0, 0, n, i),
+                    (function () {
+                      let e = s.x,
+                        t = s.y;
+                      for (const o in r) {
+                        const n = (r[+o + 1] || r[0]).position,
+                          i = r[+o].position;
+                        (i.x = e),
+                          (i.y = t),
+                          (e += 0.42 * (n.x - i.x)),
+                          (t += 0.35 * (n.y - i.y));
+                      }
+                    })(),
+                    "block" === this._options.cursorStyle ? m() : h());
                 },
                 move: (e, t) => {
                   if (((e += a / 2), (s.x = e), (s.y = t), !1 === c)) {
@@ -172,108 +175,79 @@
               };
             }
             async createCursorHandler(e) {
-              let t = document.querySelector(".part.editor");
-              if (!t) {
-                await new Promise((resolve) => {
-                  const checkEditor = setInterval(() => {
-                    t = document.querySelector(".part.editor");
-                    if (t) {
-                      clearInterval(checkEditor);
-                      resolve();
-                    }
-                  }, 100);
-                });
-              }
+              let t = null;
+              for (; !t; )
+                await new Promise((e) => setTimeout(e, 100)),
+                  (t = document.querySelector(".part.editor"));
               e?.onStarted(t);
               let o = [],
                 n = 0,
                 i = [],
                 s = 0;
               function r(t, n, r, a) {
-                let l, c;
-                const d = (a, u) => {
-                  if (!i[n]) {
-                    const idx = o.indexOf(d);
-                    if (idx !== -1) o.splice(idx, 1);
-                    return;
-                  }
-                  const rect = t.getBoundingClientRect();
-                  const p = rect.left - a;
-                  const v = rect.top - u;
-                  if (p === l && v === c && s === n) return;
-                  l = p;
-                  c = v;
-                  if (p <= 0 || v <= 0 || "inherit" === t.style.visibility) return;
-                  if (r.getBoundingClientRect().left > rect.left) return;
-                  s = n;
-                  e?.onCursorPositionUpdated(p, v);
-                  e?.onCursorSizeUpdated(t.clientWidth, t.clientHeight);
-                };
+                let l,
+                  c,
+                  d = (a, u) => {
+                    if (!i[n]) return void o.splice(o.indexOf(d), 1);
+                    let { left: h, top: m } = t.getBoundingClientRect(),
+                      p = h - a,
+                      v = m - u;
+                    (p === l && v === c && s === n) ||
+                      ((l = p),
+                      (c = v),
+                      p <= 0 ||
+                        v <= 0 ||
+                        ("inherit" === t.style.visibility &&
+                          (r.getBoundingClientRect().left > h ||
+                            ((s = n),
+                            e?.onCursorPositionUpdated(p, v),
+                            e?.onCursorSizeUpdated(
+                              t.clientWidth,
+                              t.clientHeight
+                            )))));
+                  };
                 o.push(d);
               }
               let a = !1;
-              let lastTime = 0;
-              const checkCursors = (timestamp) => {
-                if (timestamp - lastTime < 300) {
-                  requestAnimationFrame(checkCursors);
-                  return;
-                }
-                lastTime = timestamp;
-
+              this._interval = setInterval(async () => {
                 let o = [],
                   s = 0;
                 const l = t.querySelectorAll(".cursor");
-                const len = l.length;
-                for (let e = 0; e < len; e++) {
-                  const cursorEl = l[e];
+                for (let e = 0; e < l.length; e++) {
+                  const t = l[e];
                   if (
-                    ("inherit" !== cursorEl.style.visibility && s++,
-                    cursorEl.hasAttribute("cursorId"))
+                    ("inherit" !== t.style.visibility && s++,
+                    t.hasAttribute("cursorId"))
                   ) {
-                    o.push(Number(cursorEl.getAttribute("cursorId")));
+                    o.push(Number(t.getAttribute("cursorId")));
                     continue;
                   }
                   let a = n++;
-                  o.push(a);
-                  i[a] = cursorEl;
-                  cursorEl.setAttribute("cursorId", `${a}`);
-                  let c = cursorEl.parentElement?.parentElement?.parentElement;
-                  r(cursorEl, a, c);
+                  o.push(a), (i[a] = t), t.setAttribute("cursorId", `${a}`);
+                  let c = t.parentElement?.parentElement?.parentElement;
+                  c?.parentElement?.querySelector(".minimap"), r(t, a, c);
                 }
                 let c = s <= 1;
                 c !== a && (e?.onCursorVisibilityChanged(c), (a = c));
                 for (const e in i) o.includes(+e) || delete i[+e];
-
-                requestAnimationFrame(checkCursors);
-              };
-              requestAnimationFrame(checkCursors);
+              }, 500);
               const l = () => {
-                if (!this._cursorCanvas) return;
-                const { left: n, top: i } = t.getBoundingClientRect();
-                const len = o.length;
-                for (let idx = 0; idx < len; idx++) o[idx](n, i);
-                e?.onLoop();
-                requestAnimationFrame(l);
+                if (!this._interval) return;
+                let { left: n, top: i } = t.getBoundingClientRect();
+                for (const e of o) e(n, i);
+                e?.onLoop(), requestAnimationFrame(l);
               };
               function c() {
                 e?.onEditorSizeUpdated(t.clientWidth, t.clientHeight);
               }
-              let resizeTimeout;
-              const debouncedResize = () => {
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(c, 100);
-              };
-              new ResizeObserver(debouncedResize).observe(t);
-              c();
-              requestAnimationFrame(l);
-              e?.onReady();
+              new ResizeObserver(c).observe(t), c(), l(), e?.onReady();
             }
           });
       },
       456: (e, t) => {
         Object.defineProperty(t, "__esModule", { value: !0 }),
           (t.addFocusHandler = t.FocusDimMode = void 0);
-        let o = { onBlur: () => {}, onFocus: () => {}, elements: [] };
+        let o = { onBlur: () => {}, onFocus: () => {} };
         var n;
         !(function (e) {
           (e.window = "Full Window"),
@@ -284,7 +258,7 @@
         })(n || (t.FocusDimMode = n = {})),
           (t.addFocusHandler = function (e) {
             window.removeEventListener("blur", o.onBlur),
-              window.removeEventListener("focus", o.onFocus);
+              window.removeEventListener("blur", o.onFocus);
             const t =
               ".minimap, .decorationsOverviewRuler, .composite.title, .title.tabs, .editor-container:has(.settings-editor)";
             let i = "";
@@ -311,21 +285,18 @@
                 e
               );
             };
-            o.elements = s();
-            o.elements.forEach((t) => {
+            s().forEach((t) => {
               t.style.transition = `opacity ${e.duration}ms`;
-              t.style.willChange = 'opacity';
             }),
               (o.onBlur = () => {
-                const t = `${e.amount}%`;
-                for (const e of o.elements) {
-                  e.style.opacity = t;
-                }
+                s().forEach((t) => {
+                  t.style.opacity = `${e.amount}%`;
+                });
               }),
               (o.onFocus = () => {
-                for (const e of o.elements) {
+                s().forEach((e) => {
                   e.style.opacity = "100%";
-                }
+                });
               }),
               window.addEventListener("blur", o.onBlur),
               window.addEventListener("focus", o.onFocus);
@@ -338,50 +309,47 @@
         t.initTabsHandler = function () {
           const e = new MutationObserver((e) => {
               const t = { added: null, removed: null, updated: [] };
-              for (let o = 0; o < e.length; o++) {
-                const mutation = e[o];
-                const target = mutation.target;
-                const className = target.className;
-                const parentClassName = target.parentElement?.className;
-
-                if (className !== "tabs-container" && parentClassName !== "tabs-container") continue;
-
-                if (mutation.type === "childList") {
-                  if (mutation.addedNodes.length > 0) {
-                    t.added = mutation.addedNodes[0];
-                  }
-                  if (mutation.removedNodes.length > 0 && !mutation.removedNodes[0].classList.contains("deletedTab")) {
-                    const removed = mutation.removedNodes[0];
-                    removed.classList.add("deletedTab");
-                    t.removed = removed;
-                  }
-                } else if (mutation.type === "attributes") {
-                  if (mutation.attributeName !== "aria-label") continue;
-                  const newLabel = target.getAttribute("aria-label");
-                  if (mutation.oldValue === newLabel) continue;
-                  t.updated.push(target);
-                }
-              }
-
-              if (t.updated.length === 0 && !t.added && !t.removed) return;
-
-              const tabs = document.querySelectorAll(".tabs-container > .tab");
-              for (let i = 0; i < tabs.length; i++) {
-                const tab = tabs[i];
-                tab.classList.remove("newTab", "moveLeft", "moveRight");
-                void tab.offsetWidth;
-              }
-
-              if (t.added && t.updated.length > 0) {
-                t.updated[0].classList.add("newTab");
-                for (let i = 1; i < t.updated.length; i++) {
-                  t.updated[i].classList.add("moveRight");
-                }
-              } else if (t.removed) {
-                for (let i = 0; i < t.updated.length; i++) {
-                  t.updated[i].classList.add("moveLeft");
-                }
-              }
+              if (
+                (e.forEach((e) => {
+                  if (
+                    "tabs-container" === e.target.className ||
+                    "tabs-container" === e.target.parentElement?.className
+                  )
+                    if ("childList" === e.type) {
+                      if (
+                        (e.addedNodes.length > 0 && (t.added = e.addedNodes[0]),
+                        e.removedNodes.length > 0 &&
+                          !e.removedNodes[0].classList.contains("deletedTab"))
+                      ) {
+                        const o = e.removedNodes[0];
+                        o.classList.add("deletedTab"), (t.removed = o);
+                      }
+                    } else if ("attributes" === e.type) {
+                      if ("aria-label" !== e.attributeName) return;
+                      if (e.oldValue === e.target.getAttribute("aria-label"))
+                        return;
+                      t.updated.push(e.target);
+                    }
+                }),
+                0 !== t.updated.length || t.added || t.removed)
+              )
+                if (
+                  (document
+                    .querySelectorAll(".tabs-container > .tab")
+                    .forEach((e) => {
+                      e.classList.remove("newTab"),
+                        e.classList.remove("moveLeft"),
+                        e.classList.remove("moveRight"),
+                        e.offsetWidth;
+                    }),
+                  t.added && t.updated.length > 0)
+                ) {
+                  t.updated[0].classList.add("newTab");
+                  for (let e = 1; e < t.updated.length; e++)
+                    t.updated[e].classList.add("moveRight");
+                } else if (t.removed)
+                  for (let e = 0; e < t.updated.length; e++)
+                    t.updated[e].classList.add("moveLeft");
             }),
             t = {
               childList: !0,
@@ -415,24 +383,16 @@
         Object.defineProperty(t, "__esModule", { value: !0 }),
           (t.waitForElements = t.waitForElement = void 0),
           (t.waitForElement = function (e, t, o = 10) {
-            const checkElement = () => {
-              const element = document.querySelector(e);
-              if (element) {
-                clearInterval(n);
-                t(element);
-              }
-            };
-            const n = setInterval(checkElement, o);
+            const n = setInterval(() => {
+              const o = document.querySelector(e);
+              o && (clearInterval(n), t(o));
+            }, o);
           }),
           (t.waitForElements = function (e, t, o = 10) {
-            const checkElements = () => {
-              const elements = document.querySelectorAll(e);
-              if (elements.length > 0) {
-                clearInterval(n);
-                t(elements);
-              }
-            };
-            const n = setInterval(checkElements, o);
+            const n = setInterval(() => {
+              const o = document.querySelectorAll(e);
+              o.length > 0 && (clearInterval(n), t(o));
+            }, o);
           });
       },
       1: (e, t, o) => {
@@ -441,31 +401,24 @@
         const n = o(456);
         t.Messenger = class {
           constructor(e) {
-            this._lastUpdate = 0;
-            const checkElement = () => {
+            const t = setInterval(() => {
               this._messengerElement = document.getElementById(
                 "BrandonKirbyson.vscode-animations"
               );
-              const label = this._messengerElement?.getAttribute("aria-label");
-              if (this._messengerElement && label) {
-                clearInterval(t);
-                e.onLoad(this.data);
-                new MutationObserver((mutations) => {
-                  const now = Date.now();
-                  if (now - this._lastUpdate < 100) return;
-
-                  for (let i = 0; i < mutations.length; i++) {
-                    const m = mutations[i];
-                    if (m.type === "attributes" && m.attributeName === "aria-label" && m.target.getAttribute("aria-label")) {
-                      this._lastUpdate = now;
+              const o = this._messengerElement?.getAttribute("aria-label");
+              this._messengerElement &&
+                "" !== o &&
+                (clearInterval(t),
+                e.onLoad(this.data),
+                new MutationObserver((t) => {
+                  t.forEach((t) => {
+                    "attributes" === t.type &&
+                      "aria-label" === t.attributeName &&
+                      t.target.getAttribute("aria-label") &&
                       e.onUpdate(this.data);
-                      break;
-                    }
-                  }
-                }).observe(this._messengerElement, { attributes: !0 });
-              }
-            };
-            const t = setInterval(checkElement, 100);
+                  });
+                }).observe(this._messengerElement, { attributes: !0 }));
+            }, 100);
           }
           get data() {
             const e = this._messengerElement?.getAttribute("aria-label"),
@@ -502,14 +455,8 @@
           (t.styleID = "VSCode-Animations-custom-css"),
           (t.createCustomCSS = o),
           (t.updateCustomCSS = function (e) {
-            let n = document.getElementById(t.styleID);
-            if (n) {
-              if (n.textContent !== e) {
-                n.textContent = e;
-              }
-            } else {
-              o(e);
-            }
+            const n = document.querySelector(`#${t.styleID}`);
+            n ? n.textContent !== e && (n.textContent = e) : o(e);
           });
       },
     },
@@ -524,24 +471,31 @@
   (() => {
     var e = n;
     Object.defineProperty(e, "__esModule", { value: !0 });
-    // const t = o(246),
-    // const i = o(456),
-    // const s = o(302),
-    const r = o(1),
+    const t = o(246),
+      i = o(456),
+      s = o(302),
+      r = o(1),
       a = o(59);
     console.log("VSCode-Animations: Successfully Installed!"),
       (() => {
+        let e = null;
         new r.Messenger({
           onLoad: (o) => {
-            (0, a.createCustomCSS)(o.css);
-            // (0, i.addFocusHandler)(o.settings.focus);
+            (0, a.createCustomCSS)(o.css),
+              (0, i.addFocusHandler)(o.settings.focus),
+              o.settings.cursorAnimation.enabled &&
+                (e = new t.CursorAnimation(o.settings.cursorAnimation));
           },
           onUpdate: (o) => {
-            (0, a.updateCustomCSS)(o.css);
-            // (0, i.addFocusHandler)(o.settings.focus);
+            (0, a.updateCustomCSS)(o.css),
+              (0, i.addFocusHandler)(o.settings.focus),
+              o.settings.cursorAnimation.enabled
+                ? (e || (e = new t.CursorAnimation(o.settings.cursorAnimation)),
+                  e.updateOptions(o.settings.cursorAnimation))
+                : (e && e.destroy(), (e = null));
           },
-        });
-        // (0, s.initTabsHandler)();
+        }),
+          (0, s.initTabsHandler)();
       })();
   })(),
     (module.exports = n);
