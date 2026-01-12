@@ -17,7 +17,7 @@ const CursorStyle = "block" // Options are 'line' or 'block'
 const TrailLength = 8 // Recommended value is around 8
 
 // Set the polling rate for handling cursor created and destroyed events, in milliseconds.
-const CursorUpdatePollingRate = 700 // Recommended value is around 500
+const CursorUpdatePollingRate = 1000 // Optimized: reduced DOM polling frequency
 
 // Use shadow
 const UseShadow = false
@@ -157,8 +157,21 @@ function createTrail(options) {
     context.stroke()
   }
 
+  let lastCursorX = 0, lastCursorY = 0, idleFrames = 0
+  const MAX_IDLE_FRAMES = 60 // Pause after 1 second of no movement
+
   function updateParticles() {
     if (!cursorsInitted) return
+
+    // Check if cursor has moved
+    if (cursor.x === lastCursorX && cursor.y === lastCursorY) {
+      idleFrames++
+      if (idleFrames > MAX_IDLE_FRAMES) return // Skip rendering when idle
+    } else {
+      idleFrames = 0
+      lastCursorX = cursor.x
+      lastCursorY = cursor.y
+    }
 
     context.clearRect(0, 0, width, height)
     calculatePosition()
@@ -202,6 +215,8 @@ async function createCursorHandler(handlerFunctions) {
   // cursor update handler
   function createCursorUpdateHandler(target,cursorId,cursorHolder,minimap) {
     let lastX,lastY // save last position
+    let cachedMinimapLeft = 0, cachedHolderLeft = 0, framesSinceCache = 0
+
     let update = (editorX,editorY)=>{
       // If cursor was destroyed, remove update handler
       if (!lastObjects[cursorId]) {
@@ -209,7 +224,7 @@ async function createCursorHandler(handlerFunctions) {
         return
       }
 
-      // get cursor position
+      // get cursor position (single getBoundingClientRect call)
       let {left:newX,top:newY} = target.getBoundingClientRect()
       let revX = newX-editorX,revY = newY-editorY
 
@@ -223,11 +238,21 @@ async function createCursorHandler(handlerFunctions) {
       // if it is invisible, ignore
       if (target.style.visibility == "hidden") return
 
-      // if moved over minimap, ignore
-      if (minimap && minimap.offsetWidth != 0 && minimap.getBoundingClientRect().left <= newX) return
+      // Cache minimap and holder positions (update every 30 frames)
+      if (framesSinceCache > 30) {
+        if (minimap && minimap.offsetWidth != 0) {
+          cachedMinimapLeft = minimap.getBoundingClientRect().left
+        }
+        cachedHolderLeft = cursorHolder.getBoundingClientRect().left
+        framesSinceCache = 0
+      }
+      framesSinceCache++
 
-      // if cursor is not displayed on screen, ignore
-      if (cursorHolder.getBoundingClientRect().left > newX) return
+      // if moved over minimap, ignore (using cached value)
+      if (minimap && minimap.offsetWidth != 0 && cachedMinimapLeft <= newX) return
+
+      // if cursor is not displayed on screen, ignore (using cached value)
+      if (cachedHolderLeft > newX) return
 
       // update corsor position
       lastCursor = cursorId
@@ -273,10 +298,21 @@ async function createCursorHandler(handlerFunctions) {
     }
   },handlerFunctions?.cursorUpdatePollingRate || 500)
 
+  // Cache editor position and update less frequently
+  let cachedEditorX = 0, cachedEditorY = 0, frameCount = 0
+  const POSITION_UPDATE_INTERVAL = 10 // Update position every 10 frames
+
   // read cursor position polling
   function updateLoop() {
-    let {left:editorX,top:editorY} = editor.getBoundingClientRect()
-    for (handler of updateHandlers) handler(editorX,editorY)
+    // Only update editor position every N frames to reduce getBoundingClientRect calls
+    if (frameCount % POSITION_UPDATE_INTERVAL === 0) {
+      let {left:editorX,top:editorY} = editor.getBoundingClientRect()
+      cachedEditorX = editorX
+      cachedEditorY = editorY
+    }
+    frameCount++
+
+    for (handler of updateHandlers) handler(cachedEditorX,cachedEditorY)
     handlerFunctions?.onLoop()
     requestAnimationFrame(updateLoop)
   }
