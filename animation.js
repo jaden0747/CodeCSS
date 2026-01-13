@@ -139,10 +139,10 @@
                   }
                   o.stroke();
                 };
-              let p=0,g=0,b=0;return {
+              return {
                 updateParticles: () => {
-                  if(c){if(s.x===p&&s.y===g){if(++b>60)return}else b=0,p=s.x,g=s.y;
-                    o.clearRect(0, 0, n, i),
+                  c &&
+                    (o.clearRect(0, 0, n, i),
                     (function () {
                       let e = s.x,
                         t = s.y;
@@ -155,7 +155,7 @@
                           (t += 0.35 * (n.y - i.y));
                       }
                     })(),
-                    "block" === this._options.cursorStyle ? m() : h()}
+                    "block" === this._options.cursorStyle ? m() : h());
                 },
                 move: (e, t) => {
                   if (((e += a / 2), (s.x = e), (s.y = t), !1 === c)) {
@@ -186,25 +186,25 @@
                 s = 0;
               function r(t, n, r, a) {
                 let l,
-                  c,f=0,y=0,x=0,
+                  c,
                   d = (a, u) => {
                     if (!i[n]) return void o.splice(o.indexOf(d), 1);
                     let { left: h, top: m } = t.getBoundingClientRect(),
                       p = h - a,
                       v = m - u;
-                    if(p === l && v === c && s === n)return;
-                      (l = p),
-                      (c = v);
-                      if(p <= 0 || v <= 0)return;
-                        if("inherit" === t.style.visibility)return;
-                        if(++x>30){if(r)f=r.getBoundingClientRect().left;x=0}
-                        if(f > h)return;
-                            (s = n),
+                    (p === l && v === c && s === n) ||
+                      ((l = p),
+                      (c = v),
+                      p <= 0 ||
+                        v <= 0 ||
+                        ("inherit" === t.style.visibility &&
+                          (r.getBoundingClientRect().left > h ||
+                            ((s = n),
                             e?.onCursorPositionUpdated(p, v),
                             e?.onCursorSizeUpdated(
                               t.clientWidth,
                               t.clientHeight
-                            )
+                            )))));
                   };
                 o.push(d);
               }
@@ -230,11 +230,11 @@
                 let c = s <= 1;
                 c !== a && (e?.onCursorVisibilityChanged(c), (a = c));
                 for (const e in i) o.includes(+e) || delete i[+e];
-              }, 1000);
-              let k=0,w=0,z=0;const l = () => {
+              }, 500);
+              const l = () => {
                 if (!this._interval) return;
-                if(z++%10===0){let e=t.getBoundingClientRect();k=e.left;w=e.top}
-                for (const e of o) e(k, w);
+                let { left: n, top: i } = t.getBoundingClientRect();
+                for (const e of o) e(n, i);
                 e?.onLoop(), requestAnimationFrame(l);
               };
               function c() {
