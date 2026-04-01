@@ -74,32 +74,43 @@
 /* ==================== Overlay frosted glass effects ==================== */
 
 /* Code definition hover */
-.monaco-workbench .monaco-hover,
-.monaco-workbench .monaco-editor-hover,
-.monaco-workbench .editor-hover-content,
-.monaco-hover-content,
-.monaco-hover,
-.monaco-editor-hover,
-.editor-hover-content {
-  background: rgba(30, 30, 30, 0) !important;
+/* VSCode 1.114+: outer wrapper is .monaco-resizable-hover (has background), inner is .monaco-hover (also has background) */
+/* Confirmed from workbench.desktop.main.css: both have background-color: var(--vscode-editorHoverWidget-background) */
+.monaco-editor .monaco-resizable-hover,
+.monaco-editor .monaco-hover {
+  background: transparent !important;
+  background-color: transparent !important;
   backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important;
   -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate) var(--glass-brightness) !important;
   border: none !important;
   /* box-shadow: 0 8px 30px 0 var(--glass-shadow) !important; */
   border-radius: 10px !important;
+  overflow: hidden !important;
 }
 
-/* Hover content area */
-.monaco-workbench .monaco-hover .hover-contents,
-.monaco-hover .hover-contents,
-.monaco-workbench .monaco-hover .hover-row,
-.monaco-hover .hover-row,
-.monaco-workbench .monaco-hover .monaco-editor,
-.monaco-hover .monaco-editor {
+/* Inner .monaco-hover nested inside .monaco-resizable-hover — transparent, no double border */
+.monaco-editor .monaco-resizable-hover > .monaco-hover {
   background: transparent !important;
+  background-color: transparent !important;
   border: none !important;
-  border-radius: 10px !important;
-  outline: none !important;
+  border-radius: inherit !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* All descendant rows and content areas — keep transparent */
+.monaco-editor .monaco-hover .hover-row,
+.monaco-editor .monaco-hover .hover-contents,
+.monaco-editor .monaco-hover .markdown-hover {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Status bar actions row — keep transparent */
+.monaco-editor .monaco-hover .hover-row.status-bar .actions {
+  background: transparent !important;
+  background-color: transparent !important;
 }
 
 /* Code suggestion box (Suggest Widget) */
