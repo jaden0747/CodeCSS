@@ -2,247 +2,308 @@
   "use strict";
   var e = {
       246: (e, t) => {
-        Object.defineProperty(t, "__esModule", { value: !0 }),
-          (t.CursorAnimation = void 0),
-          (t.CursorAnimation = class {
-            constructor(e) {
-              (this._cursorCanvas = document.createElement("canvas")),
-                (this._interval = null),
-                (this._options = {
-                  color: e?.color || "#ffffff",
-                  cursorStyle: e?.cursorStyle || "block",
-                  trailLength: e?.trailLength || 8,
-                }),
-                this.init();
-            }
-            getColor() {
-              return this._options.color.startsWith("--")
-                ? getComputedStyle(
-                    document.querySelector(".monaco-workbench")
-                  ).getPropertyValue(this._options.color)
-                : this._options.color;
-            }
-            updateOptions(e) {
-              (this._options.color = e?.color || this._options.color),
-                (this._options.cursorStyle =
-                  e?.cursorStyle || this._options.cursorStyle),
-                (this._options.trailLength =
-                  e?.trailLength || this._options.trailLength);
-            }
-            destroy() {
-              this._cursorHandle.stop(),
-                (this._cursorHandle = null),
-                this._cursorCanvas.remove(),
-                this._interval && clearInterval(this._interval),
-                (this._interval = null);
-            }
-            init() {
-              this.createCursorHandler({
-                onStarted: (e) => {
-                  (this._cursorCanvas.style.pointerEvents = "none"),
-                    (this._cursorCanvas.style.position = "absolute"),
-                    (this._cursorCanvas.style.top = "0px"),
-                    (this._cursorCanvas.style.left = "0px"),
-                    (this._cursorCanvas.style.zIndex = "1000"),
-                    e.appendChild(this._cursorCanvas),
-                    (this._cursorHandle = this.createTrail({
-                      length: this._options.trailLength,
-                      color: this._options.color,
-                      size: 7,
-                      style: this._options.cursorStyle,
-                      canvas: this._cursorCanvas,
-                    }));
-                },
-                onReady: () => {},
-                onCursorPositionUpdated: (e, t) => {
-                  this._cursorHandle.move(e, t);
-                },
-                onEditorSizeUpdated: (e, t) => {
-                  this._cursorHandle.updateSize(e, t);
-                },
-                onCursorSizeUpdated: (e, t) => {
-                  this._cursorHandle.updateCursorSize(e, t);
-                },
-                onCursorVisibilityChanged: (e) => {
-                  this._cursorCanvas.style.visibility = e
-                    ? "visible"
-                    : "hidden";
-                },
-                onLoop: () => {
-                  this._cursorHandle.updateParticles();
-                },
-              });
-            }
-            createTrail(e) {
-              const t = e?.canvas,
-                o = t.getContext("2d");
-              let n,
-                i,
-                s = { x: 0, y: 0 },
-                r = [],
-                a = e?.size || 3,
-                l = e?.sizeY || 2.2 * a,
-                c = !1;
-              class d {
-                constructor(e, t) {
-                  this._position = { x: e, y: t };
-                }
-                get position() {
-                  return this._position;
-                }
-              }
-              function u(e, t) {
-                r.push(new d(e, t));
-              }
-              const h = () => {
-                  o.beginPath(),
-                    (o.lineJoin = "round"),
-                    (o.strokeStyle = this.getColor());
-                  const e = Math.min(a, l);
-                  o.lineWidth = e;
-                  let t = (l - e) / 3;
-                  for (let n = 0; n <= 3; n++) {
-                    let i = n * t;
-                    for (let t = 0; t < this._options.trailLength; t++) {
-                      if (!r[t]) continue;
-                      const n = r[t].position;
-                      0 === t
-                        ? o.moveTo(n.x, n.y + i + e / 2)
-                        : o.lineTo(n.x, n.y + i + e / 2);
-                    }
-                  }
-                  o.stroke();
-                },
-                m = () => {
-                  o.beginPath(), (o.fillStyle = this.getColor());
-                  for (let e = 0; e < this._options.trailLength; e++) {
-                    if (!r[e]) continue;
-                    const t = r[+e].position;
-                    0 === e ? o.moveTo(t.x, t.y) : o.lineTo(t.x, t.y);
-                  }
-                  for (let e = this._options.trailLength - 1; e >= 0; e--) {
-                    if (!r[e]) continue;
-                    const t = r[+e].position;
-                    o.lineTo(t.x, t.y + l);
-                  }
-                  o.closePath(),
-                    o.fill(),
-                    o.beginPath(),
-                    (o.lineJoin = "round"),
-                    (o.strokeStyle = this.getColor()),
-                    (o.lineWidth = Math.min(a, l));
-                  let e = -a / 2 + l / 2;
-                  for (let t = 0; t < this._options.trailLength; t++) {
-                    if (!r[t]) continue;
-                    const n = r[t].position;
-                    0 === t ? o.moveTo(n.x, n.y + e) : o.lineTo(n.x, n.y + e);
-                  }
-                  o.stroke();
-                };
-              return {
-                updateParticles: () => {
-                  c &&
-                    (o.clearRect(0, 0, n, i),
-                    (function () {
-                      let e = s.x,
-                        t = s.y;
-                      for (const o in r) {
-                        const n = (r[+o + 1] || r[0]).position,
-                          i = r[+o].position;
-                        (i.x = e),
-                          (i.y = t),
-                          (e += 0.42 * (n.x - i.x)),
-                          (t += 0.35 * (n.y - i.y));
-                      }
-                    })(),
-                    "block" === this._options.cursorStyle ? m() : h());
-                },
-                move: (e, t) => {
-                  if (((e += a / 2), (s.x = e), (s.y = t), !1 === c)) {
-                    c = !0;
-                    for (let o = 0; o < this._options.trailLength; o++) u(e, t);
-                  }
-                },
-                updateSize: function (e, o) {
-                  (n = e), (i = o), (t.width = e), (t.height = o);
-                },
-                updateCursorSize: function (e, t) {
-                  (a = e), t && (l = t);
-                },
-                stop: function () {
-                  (r = []), o.clearRect(0, 0, n, i);
-                },
-              };
-            }
-            async createCursorHandler(e) {
-              let t = null;
-              for (; !t; )
-                await new Promise((e) => setTimeout(e, 100)),
-                  (t = document.querySelector(".part.editor"));
-              e?.onStarted(t);
-              let o = [],
-                n = 0,
-                i = [],
-                s = 0;
-              function r(t, n, r, a) {
-                let l,
-                  c,
-                  d = (a, u) => {
-                    if (!i[n]) return void o.splice(o.indexOf(d), 1);
-                    let { left: h, top: m } = t.getBoundingClientRect(),
-                      p = h - a,
-                      v = m - u;
-                    (p === l && v === c && s === n) ||
-                      ((l = p),
-                      (c = v),
-                      p <= 0 ||
-                        v <= 0 ||
-                        ("inherit" === t.style.visibility &&
-                          (r.getBoundingClientRect().left > h ||
-                            ((s = n),
-                            e?.onCursorPositionUpdated(p, v),
-                            e?.onCursorSizeUpdated(
-                              t.clientWidth,
-                              t.clientHeight
-                            )))));
-                  };
-                o.push(d);
-              }
-              let a = !1;
-              this._interval = setInterval(async () => {
-                let o = [],
-                  s = 0;
-                const l = t.querySelectorAll(".cursor");
-                for (let e = 0; e < l.length; e++) {
-                  const t = l[e];
+        Object.defineProperty(t, "__esModule", { value: !0 });
+        t.CursorAnimation = void 0;
+        // Kitty-style cursor trail: one stretchy quad whose four corners chase
+        // the cursor rect with exponential decay. Corners facing the direction
+        // of travel converge fast, trailing corners lag, so the quad stretches
+        // like taffy and snaps into place (kitty's cursor_trail).
+        t.CursorAnimation = class {
+          constructor(e) {
+            this._cursorCanvas = document.createElement("canvas");
+            this._interval = null;
+            this._options = {
+              color: e?.color || "#ffffff",
+              cursorStyle: e?.cursorStyle || "block",
+              trailLength: e?.trailLength || 8,
+            };
+            this.init();
+          }
+          getColor() {
+            return this._options.color.startsWith("--")
+              ? getComputedStyle(
+                  document.querySelector(".monaco-workbench")
+                ).getPropertyValue(this._options.color)
+              : this._options.color;
+          }
+          updateOptions(e) {
+            this._options.color = e?.color || this._options.color;
+            this._options.cursorStyle =
+              e?.cursorStyle || this._options.cursorStyle;
+            this._options.trailLength =
+              e?.trailLength || this._options.trailLength;
+          }
+          destroy() {
+            this._cursorHandle.stop();
+            this._cursorHandle = null;
+            this._cursorCanvas.remove();
+            this._interval && clearInterval(this._interval);
+            this._interval = null;
+          }
+          init() {
+            this.createCursorHandler({
+              onStarted: (editor) => {
+                this._cursorCanvas.style.pointerEvents = "none";
+                this._cursorCanvas.style.position = "absolute";
+                this._cursorCanvas.style.top = "0px";
+                this._cursorCanvas.style.left = "0px";
+                this._cursorCanvas.style.zIndex = "1000";
+                editor.appendChild(this._cursorCanvas);
+                this._cursorHandle = this.createTrail({
+                  size: 7,
+                  canvas: this._cursorCanvas,
+                });
+              },
+              onReady: () => {},
+              onCursorPositionUpdated: (x, y) => {
+                this._cursorHandle.move(x, y);
+              },
+              onEditorSizeUpdated: (w, h) => {
+                this._cursorHandle.updateSize(w, h);
+              },
+              onCursorSizeUpdated: (w, h) => {
+                this._cursorHandle.updateCursorSize(w, h);
+              },
+              onCursorVisibilityChanged: (visible) => {
+                this._cursorCanvas.style.visibility = visible
+                  ? "visible"
+                  : "hidden";
+              },
+              onLoop: () => {
+                this._cursorHandle.updateParticles();
+              },
+            });
+          }
+          createTrail(e) {
+            const canvas = e?.canvas;
+            const ctx = canvas.getContext("2d");
+            let width, height;
+            let cursorW = e?.size || 3;
+            let cursorH = e?.sizeY || 2.2 * cursorW;
+            let target = { x: 0, y: 0 }; // cursor top-left, editor-relative
+            let corners = null; // trail quad corners: tl, tr, br, bl
+            let animating = false;
+            let lastTime = 0;
+
+            const targetCorners = () => [
+              { x: target.x, y: target.y },
+              { x: target.x + cursorW, y: target.y },
+              { x: target.x + cursorW, y: target.y + cursorH },
+              { x: target.x, y: target.y + cursorH },
+            ];
+            const snap = () => {
+              corners = targetCorners();
+            };
+
+            return {
+              move: (x, y) => {
+                const first = corners === null;
+                const dx = x - target.x;
+                const dy = y - target.y;
+                target.x = x;
+                target.y = y;
+                if (first) return snap();
+                if (!animating) {
+                  // kitty's cursor_trail_start_threshold: typing-sized moves
+                  // (< 2 chars, same line) teleport instead of smearing
                   if (
-                    ("inherit" !== t.style.visibility && s++,
-                    t.hasAttribute("cursorId"))
-                  ) {
-                    o.push(Number(t.getAttribute("cursorId")));
-                    continue;
-                  }
-                  let a = n++;
-                  o.push(a), (i[a] = t), t.setAttribute("cursorId", `${a}`);
-                  let c = t.parentElement?.parentElement?.parentElement;
-                  c?.parentElement?.querySelector(".minimap"), r(t, a, c);
+                    Math.abs(dx) < 2 * cursorW &&
+                    Math.abs(dy) < 0.5 * cursorH
+                  )
+                    return snap();
+                  animating = true;
+                  lastTime = performance.now();
                 }
-                let c = s <= 1;
-                c !== a && (e?.onCursorVisibilityChanged(c), (a = c));
-                for (const e in i) o.includes(+e) || delete i[+e];
-              }, 500);
-              const l = () => {
-                if (!this._interval) return;
-                let { left: n, top: i } = t.getBoundingClientRect();
-                for (const e of o) e(n, i);
-                e?.onLoop(), requestAnimationFrame(l);
-              };
-              function c() {
-                e?.onEditorSizeUpdated(t.clientWidth, t.clientHeight);
-              }
-              new ResizeObserver(c).observe(t), c(), l(), e?.onReady();
+              },
+              updateParticles: () => {
+                if (!animating) return;
+                const now = performance.now();
+                const dt = Math.min((now - lastTime) / 1000, 0.1);
+                lastTime = now;
+
+                // decay times in seconds, scaled by the TrailLength setting:
+                // TrailLength 4 = slow 0.2s, fast 0.05s (2x kitty's defaults)
+                const slow = 0.05 * this._options.trailLength;
+                const fast = 0.0125 * this._options.trailLength;
+
+                // remaining direction of travel: quad centre -> cursor centre
+                const cx = target.x + cursorW / 2;
+                const cy = target.y + cursorH / 2;
+                let qx = 0,
+                  qy = 0;
+                for (const c of corners) {
+                  qx += c.x;
+                  qy += c.y;
+                }
+                let dirX = cx - qx / 4;
+                let dirY = cy - qy / 4;
+                const dirLen = Math.hypot(dirX, dirY);
+                if (dirLen > 1e-6) {
+                  dirX /= dirLen;
+                  dirY /= dirLen;
+                }
+
+                const goals = targetCorners();
+                let maxDist = 0;
+                for (let i = 0; i < 4; i++) {
+                  const c = corners[i];
+                  const g = goals[i];
+                  // corners facing the direction of travel decay fastest
+                  const ox = g.x - cx;
+                  const oy = g.y - cy;
+                  const oLen = Math.hypot(ox, oy) || 1;
+                  const align =
+                    dirLen > 1e-6 ? (dirX * ox + dirY * oy) / oLen : 1;
+                  const decay = slow + ((fast - slow) * (align + 1)) / 2;
+                  const step = 1 - Math.exp(-dt / decay);
+                  c.x += (g.x - c.x) * step;
+                  c.y += (g.y - c.y) * step;
+                  maxDist = Math.max(
+                    maxDist,
+                    Math.abs(g.x - c.x),
+                    Math.abs(g.y - c.y)
+                  );
+                }
+
+                ctx.clearRect(0, 0, width, height);
+                if (maxDist < 0.5) {
+                  animating = false;
+                  snap();
+                  return;
+                }
+                // comet fade: opaque at the cursor, transparent at the tail
+                // (the corner farthest from the cursor centre)
+                const color = this.getColor();
+                let tail = corners[0];
+                let tailDist = 0;
+                for (const c of corners) {
+                  const d = Math.hypot(c.x - cx, c.y - cy);
+                  if (d > tailDist) {
+                    tailDist = d;
+                    tail = c;
+                  }
+                }
+                let fill = color;
+                if (tailDist > 1) {
+                  fill = ctx.createLinearGradient(tail.x, tail.y, cx, cy);
+                  // normalize any color format via the canvas, then zero its alpha
+                  ctx.fillStyle = color;
+                  const n = ctx.fillStyle;
+                  const transparent = n.startsWith("#")
+                    ? `rgba(${parseInt(n.slice(1, 3), 16)},${parseInt(
+                        n.slice(3, 5),
+                        16
+                      )},${parseInt(n.slice(5, 7), 16)},0)`
+                    : n.replace(/^rgba\((.+),[^,]+\)$/, "rgba($1,0)");
+                  fill.addColorStop(0, transparent);
+                  fill.addColorStop(1, n);
+                }
+                ctx.beginPath();
+                ctx.fillStyle = fill;
+                ctx.moveTo(corners[0].x, corners[0].y);
+                for (let i = 1; i < 4; i++) ctx.lineTo(corners[i].x, corners[i].y);
+                ctx.closePath();
+                ctx.fill();
+              },
+              updateSize: (w, h) => {
+                width = w;
+                height = h;
+                canvas.width = w;
+                canvas.height = h;
+              },
+              updateCursorSize: (w, h) => {
+                cursorW = w;
+                if (h) cursorH = h;
+              },
+              stop: () => {
+                animating = false;
+                corners = null;
+                if (width) ctx.clearRect(0, 0, width, height);
+              },
+            };
+          }
+          async createCursorHandler(e) {
+            let editor = null;
+            while (!editor) {
+              await new Promise((r) => setTimeout(r, 100));
+              editor = document.querySelector(".part.editor");
             }
-          });
+            e?.onStarted(editor);
+
+            let updateHandlers = [];
+            let nextCursorId = 0;
+            let cursors = []; // cursorId -> cursor element
+            let lastCursor = 0;
+
+            const createCursorUpdateHandler = (target, cursorId, holder) => {
+              let lastX, lastY;
+              const update = (editorX, editorY) => {
+                if (!cursors[cursorId]) {
+                  updateHandlers.splice(updateHandlers.indexOf(update), 1);
+                  return;
+                }
+                const { left, top } = target.getBoundingClientRect();
+                const relX = left - editorX;
+                const relY = top - editorY;
+                if (relX === lastX && relY === lastY && lastCursor === cursorId)
+                  return;
+                lastX = relX;
+                lastY = relY;
+                if (relX <= 0 || relY <= 0) return;
+                if ("inherit" !== target.style.visibility) return;
+                if (holder.getBoundingClientRect().left > left) return;
+                lastCursor = cursorId;
+                e?.onCursorPositionUpdated(relX, relY);
+                e?.onCursorSizeUpdated(target.clientWidth, target.clientHeight);
+              };
+              updateHandlers.push(update);
+            };
+
+            let lastVisible = false;
+            this._interval = setInterval(() => {
+              const ids = [];
+              let hiddenCount = 0;
+              const cursorElements = editor.querySelectorAll(".cursor");
+              for (let i = 0; i < cursorElements.length; i++) {
+                const target = cursorElements[i];
+                if ("inherit" !== target.style.visibility) hiddenCount++;
+                if (target.hasAttribute("cursorId")) {
+                  ids.push(Number(target.getAttribute("cursorId")));
+                  continue;
+                }
+                const id = nextCursorId++;
+                ids.push(id);
+                cursors[id] = target;
+                target.setAttribute("cursorId", `${id}`);
+                const holder =
+                  target.parentElement?.parentElement?.parentElement;
+                createCursorUpdateHandler(target, id, holder);
+              }
+              const visible = hiddenCount <= 1;
+              if (visible !== lastVisible) {
+                e?.onCursorVisibilityChanged(visible);
+                lastVisible = visible;
+              }
+              for (const id in cursors)
+                if (!ids.includes(+id)) delete cursors[+id];
+            }, 500);
+
+            const loop = () => {
+              if (!this._interval) return;
+              const { left, top } = editor.getBoundingClientRect();
+              for (const update of updateHandlers) update(left, top);
+              e?.onLoop();
+              requestAnimationFrame(loop);
+            };
+            const updateEditorSize = () => {
+              e?.onEditorSizeUpdated(editor.clientWidth, editor.clientHeight);
+            };
+            new ResizeObserver(updateEditorSize).observe(editor);
+            updateEditorSize();
+            loop();
+            e?.onReady();
+          }
+        };
       },
       456: (e, t) => {
         Object.defineProperty(t, "__esModule", { value: !0 }),
