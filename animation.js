@@ -40,6 +40,23 @@
             this._interval && clearInterval(this._interval);
             this._interval = null;
           }
+          // `.part.editor` has position:static, so the canvas's
+          // absolute top:0/left:0 doesn't anchor to it — it resolves
+          // against whichever ancestor is actually positioned (a
+          // split-view-view pane a few levels up), which can sit a few
+          // px off from the editor's own box (varies with sidebar
+          // state, floating scrollbar, etc). Measure the drift and
+          // shift the canvas to cancel it out, so canvas-local (0,0)
+          // really is editor-local (0,0), matching the coordinate
+          // space onCursorPositionUpdated already uses.
+          realignCanvas(editor) {
+            const er = editor.getBoundingClientRect();
+            const cr = this._cursorCanvas.getBoundingClientRect();
+            const curLeft = parseFloat(this._cursorCanvas.style.left) || 0;
+            const curTop = parseFloat(this._cursorCanvas.style.top) || 0;
+            this._cursorCanvas.style.left = `${curLeft + (er.left - cr.left)}px`;
+            this._cursorCanvas.style.top = `${curTop + (er.top - cr.top)}px`;
+          }
           init() {
             this.createCursorHandler({
               onStarted: (editor) => {
@@ -49,6 +66,8 @@
                 this._cursorCanvas.style.left = "0px";
                 this._cursorCanvas.style.zIndex = "1000";
                 editor.appendChild(this._cursorCanvas);
+                this._editorEl = editor;
+                this.realignCanvas(editor);
                 this._cursorHandle = this.createTrail({
                   size: 7,
                   canvas: this._cursorCanvas,
@@ -59,6 +78,10 @@
                 this._cursorHandle.move(x, y);
               },
               onEditorSizeUpdated: (w, h) => {
+                // fires on every editor resize (sidebar toggle, window
+                // resize, split changes) — realign before resizing the
+                // canvas backing store to that new layout
+                this.realignCanvas(this._editorEl);
                 this._cursorHandle.updateSize(w, h);
               },
               onCursorSizeUpdated: (w, h) => {
@@ -166,7 +189,7 @@
                 }
 
                 ctx.clearRect(0, 0, width, height);
-                if (maxDist < 0.5) {
+                if (maxDist < 1.5) {
                   animating = false;
                   snap();
                   return;
@@ -189,12 +212,13 @@
                   // normalize any color format via the canvas, then zero its alpha
                   ctx.fillStyle = color;
                   const n = ctx.fillStyle;
+                  // 0.3 floor keeps the tail at 30% opacity instead of fading out
                   const transparent = n.startsWith("#")
                     ? `rgba(${parseInt(n.slice(1, 3), 16)},${parseInt(
                         n.slice(3, 5),
                         16
-                      )},${parseInt(n.slice(5, 7), 16)},0)`
-                    : n.replace(/^rgba\((.+),[^,]+\)$/, "rgba($1,0)");
+                      )},${parseInt(n.slice(5, 7), 16)},0.3)`
+                    : n.replace(/^rgba\((.+),[^,]+\)$/, "rgba($1,0.3)");
                   fill.addColorStop(0, transparent);
                   fill.addColorStop(1, n);
                 }
@@ -238,18 +262,19 @@
             const createCursorUpdateHandler = (target, cursorId, holder) => {
               let lastX, lastY;
               const update = (editorX, editorY) => {
-                if (!cursors[cursorId]) {
+                if (!cursors[cursorId] || !target.isConnected) {
                   updateHandlers.splice(updateHandlers.indexOf(update), 1);
                   return;
                 }
-                const { left, top } = target.getBoundingClientRect();
+                const { left, top, height } = target.getBoundingClientRect();
+                // zero-size rect = cursor in a hidden editor, not a real position
+                if (height === 0) return;
                 const relX = left - editorX;
                 const relY = top - editorY;
                 if (relX === lastX && relY === lastY && lastCursor === cursorId)
                   return;
                 lastX = relX;
                 lastY = relY;
-                if (relX <= 0 || relY <= 0) return;
                 if ("inherit" !== target.style.visibility) return;
                 if (holder.getBoundingClientRect().left > left) return;
                 lastCursor = cursorId;
@@ -286,7 +311,7 @@
               }
               for (const id in cursors)
                 if (!ids.includes(+id)) delete cursors[+id];
-            }, 500);
+            }, 100);
 
             const loop = () => {
               if (!this._interval) return;
